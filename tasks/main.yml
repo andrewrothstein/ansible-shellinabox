@@ -1,0 +1,39 @@
+---
+- name: (Debian) deps...
+  when: ansible_os_family == 'Debian'
+  include: Debian-deps.yml
+
+- name: (EL) deps...
+  when: ansible_os_family == 'RedHat'
+  include: EL-deps.yml
+
+- name: download src...
+  get_url: >-
+    url={{shellinabox_tgz_url}}
+    dest=/tmp/shellinabox.tgz
+    owner=root
+    group=root
+    mode=644
+
+- name: unarchive 
+  unarchive: >-
+    copy=no
+    src=/tmp/shellinabox.tgz
+    dest=/opt
+    owner=root
+    group=root
+
+- name: build...
+  command: '{{item}}'
+  with_items:
+    - autoreconf -i
+    - ./configure
+    - make
+    - make install
+  args:
+    chdir: /opt/{{shellinabox_name}}
+
+- name: cleanup...
+  command: rm -rf /opt/{{shellinabox_name}}
+  when: shellinabox_cleanup
+  

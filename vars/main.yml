@@ -1,0 +1,4 @@
+---
+shellinabox_tgz : 'v{{shellinabox_ver}}.tar.gz'
+shellinabox_tgz_url : 'https://github.com/shellinabox/shellinabox/archive/{{shellinabox_tgz}}'
+shellinabox_name : 'shellinabox-{{shellinabox_ver}}'
