@@ -1,30 +1,39 @@
 ---
-- name: (Debian) deps...
-  when: ansible_os_family == 'Debian'
-  include: Debian-deps.yml
+- name: resolve platform specific vars
+  include_vars: "{{item}}"
+  with_first_found:
+    - "{{ansible_distribution}}-{{ansible_distribution_release}}.yml"
+    - "{{ansible_distribution}}.yml"
+    - "{{ansible_os_family}}.yml"
 
-- name: (EL) deps...
-  when: ansible_os_family == 'RedHat'
-  include: EL-deps.yml
+- name: install dep pkgs
+  become: yes
+  become_user: root
+  with_items: '{{shellinabox_pkg_deps}}'
+  package: name={{item}} state=present
 
 - name: download src...
+  become: yes
+  become_user: root
   get_url: >-
     url={{shellinabox_tgz_url}}
-    dest=/tmp/shellinabox.tgz
-    owner=root
-    group=root
-    mode=644
+    dest=/tmp/{{shellinabox_name}}.tgz
+    mode=0644
 
-- name: unarchive 
+- name: unarchive
+  become: yes
+  become_user: root
   unarchive: >-
     copy=no
-    src=/tmp/shellinabox.tgz
+    src=/tmp/{{shellinabox_name}}.tgz
     dest=/opt
-    owner=root
-    group=root
+    creates=/opt/{{shellinabox_name}}
 
 - name: build...
-  command: '{{item}}'
+  become: yes
+  become_user: root
+  command: >
+    {{item}}
   with_items:
     - autoreconf -i
     - ./configure
@@ -34,6 +43,8 @@
     chdir: /opt/{{shellinabox_name}}
 
 - name: cleanup...
+  become: yes
+  become_user: root
   command: rm -rf /opt/{{shellinabox_name}}
   when: shellinabox_cleanup
   

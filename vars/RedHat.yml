@@ -1,0 +1,8 @@
+---
+shellinabox_pkg_deps:
+  - openssl-devel
+  - pam-devel
+  - zlib-devel
+  - autoconf
+  - automake
+  - libtool

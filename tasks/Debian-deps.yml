@@ -1,8 +1,0 @@
----
-- name: deps...
-  apt: name={{item}} state=latest
-  with_items:
-    - libssl-dev
-    - libpam0g-dev
-    - zlib1g-dev
-    - dh-autoreconf
