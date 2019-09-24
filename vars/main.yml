@@ -1,4 +1,5 @@
 ---
-shellinabox_tgz : 'v{{shellinabox_ver}}.tar.gz'
-shellinabox_tgz_url : 'https://github.com/shellinabox/shellinabox/archive/{{shellinabox_tgz}}'
-shellinabox_name : 'shellinabox-{{shellinabox_ver}}'
+shellinabox_tgz_url: https://github.com/shellinabox/shellinabox/archive/v{{ shellinabox_ver }}.tar.gz
+shellinabox_name: shellinabox-{{ shellinabox_ver }}
+shellinabox_tgz: '{{ shellinabox_name }}.tar.gz'
+shellinabox_src_dir: '{{ shellinabox_parent_src_dir }}/{{ shellinabox_name }}'

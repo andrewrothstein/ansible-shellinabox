@@ -1,50 +1,47 @@
 ---
 - name: resolve platform specific vars
-  include_vars: "{{item}}"
+  include_vars: '{{ item }}'
   with_first_found:
-    - "{{ansible_distribution}}-{{ansible_distribution_release}}.yml"
-    - "{{ansible_distribution}}.yml"
-    - "{{ansible_os_family}}.yml"
+    - files:
+        - '{{ ansible_distribution }}-{{ ansible_distribution_release }}.yml'
+        - '{{ ansible_distribution }}.yml'
+        - '{{ ansible_os_family }}.yml'
+      skip: true
+      paths:
+        - '{{ role_path }}/vars'
 
 - name: install dep pkgs
   become: yes
   become_user: root
-  with_items: '{{shellinabox_pkg_deps}}'
-  package: name={{item}} state=present
+  package:
+    name: '{{ shellinabox_pkg_deps | default([]) }}'
+    state: present
 
 - name: download src...
   become: yes
   become_user: root
-  get_url: >-
-    url={{shellinabox_tgz_url}}
-    dest=/tmp/{{shellinabox_name}}.tgz
-    mode=0644
+  get_url:
+    url: '{{ shellinabox_tgz_url }}'
+    dest: /tmp/{{ shellinabox_tgz }}
+    mode: 0644
 
 - name: unarchive
   become: yes
   become_user: root
-  unarchive: >-
-    copy=no
-    src=/tmp/{{shellinabox_name}}.tgz
-    dest=/opt
-    creates=/opt/{{shellinabox_name}}
+  unarchive:
+    remote_src: yes
+    src: /tmp/{{ shellinabox_tgz }}
+    dest: '{{ shellinabox_parent_src_dir }}'
+    creates: '{{ shellinabox_src_dir }}'
 
 - name: build...
   become: yes
   become_user: root
-  command: >
-    {{item}}
   with_items:
     - autoreconf -i
     - ./configure
     - make
     - make install
+  command: '{{ item }}'
   args:
-    chdir: /opt/{{shellinabox_name}}
-
-- name: cleanup...
-  become: yes
-  become_user: root
-  command: rm -rf /opt/{{shellinabox_name}}
-  when: shellinabox_cleanup
-  
+    chdir: /usr/local/src/{{ shellinabox_name }}

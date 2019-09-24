@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: Andrew Rothstein
-  description: 'role for https://github.com/shellinabox/shellinabox'
+  description: installs shellinabox
   company: BlackRock
   license:
     - MIT
@@ -20,6 +20,11 @@ galaxy_info:
   categories:
     - development
 
-dependencies: []
-
-  
+dependencies:
+  - role: andrewrothstein.unarchive-deps
+    version: v1.1.1
+  - role: andrewrothstein.gcc-toolbox
+    version: v1.0.14
+  - role: andrewrothstein.openssl
+    version: v1.0.2
+    openssl_include_dev_pkgs: True

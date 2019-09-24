@@ -1,4 +1,4 @@
 ---
-shellinabox_ver : '2.19'
-shellinabox_mirror : 'https://github.com/shellinabox/shellinabox/archive'
-shellinabox_cleanup : False
+shellinabox_ver: '2.20'
+shellinabox_mirror: https://github.com/shellinabox/shellinabox/archive
+shellinabox_parent_src_dir: /usr/local/src

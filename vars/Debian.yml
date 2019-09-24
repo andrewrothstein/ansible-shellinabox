@@ -1,6 +1,5 @@
 ---
 shellinabox_pkg_deps:
-  - libssl-dev
   - libpam0g-dev
   - zlib1g-dev
   - dh-autoreconf
