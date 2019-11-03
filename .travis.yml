@@ -8,7 +8,7 @@ branches:
 dist: xenial
 env:
 - OS=debian_buster
-- OS=xenial_bionic
+- OS=ubuntu_bionic
 language: python
 python: '3.7'
 script:
